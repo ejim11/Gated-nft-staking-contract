@@ -9,7 +9,7 @@ contract StakeContract {
 
     IERC721 public nft;
     IERC20 public token;
-    uint public rewardRate;
+    uint8 public rewardRate;
     uint public stakingStartTime;
     uint public stakingEndTime;
 
@@ -18,7 +18,7 @@ contract StakeContract {
         uint stakeStartTime;
     }
 
-    mapping(address => Stake) stakes;
+    mapping(address => Stake) public stakes;
 
     event Staked(address indexed staker, uint stakedAmount);
 
@@ -29,7 +29,7 @@ contract StakeContract {
     constructor(
         address _requiredNftAddress,
         address _requiredTokenAddress,
-        uint _rewardRate,
+        uint8 _rewardRate,
         uint _stakingStartTime,
         uint _stakingEndTime
     ) {
@@ -43,7 +43,10 @@ contract StakeContract {
 
     function stake(uint _amount) external {
         // checking if the user has the nft
-        require(nft.balanceOf(msg.sender) > 0);
+        require(
+            nft.balanceOf(msg.sender) > 0,
+            "you don't have the required nft"
+        );
 
         // checking that the user has sufficient balance
         require(token.balanceOf(msg.sender) > _amount, "Not enough tokens");
@@ -81,7 +84,7 @@ contract StakeContract {
             60 /
             24;
         uint reward = stakes[staker].stakeAmount *
-            rewardRate *
+            (rewardRate / 1000) *
             timeStakedInDays;
         return reward;
     }

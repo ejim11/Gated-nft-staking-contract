@@ -3,9 +3,9 @@ const { ethers, run, network } = require("hardhat");
 async function main() {
     const nftContractAddress = "";
     const tokenContractAddress = "";
-    const rewardRate = 0.001;
-    const startDate = new Date("2023-04-01").getTime();
-    const endDate = new Date("2023-05-30").getTime();
+    const rewardRate = 1;
+    const startDate = new Date("2023-04-01").getTime() / 1000;
+    const endDate = new Date("2023-05-30").getTime() / 1000;
 
     const StakeContractFactory = await ethers.getContractFactory(
         "StakeContract"
